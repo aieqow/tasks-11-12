@@ -1,0 +1,17 @@
+def permutations(s):
+    # Базовый случай: пустая строка или строка из одного символа
+    if len(s) <= 1:
+        return [s]
+    result = []  # список для хранения всех перестановок
+    # Перебираем каждый символ строки как первый
+    for i in range(len(s)):
+        first_char = s[i]  # выбираем символ
+        remaining = s[:i] + s[i+1:]  # строка без выбранного символа
+        # Рекурсивно получаем все перестановки оставшейся части строки
+        for perm in permutations(remaining):
+            result.append(first_char + perm)
+    return result
+# Пример использования:
+print(permutations("abc"))
+# Возможный вывод:
+# ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
