@@ -1,0 +1,39 @@
+def dfs(graph):
+    visited = set()    # множество посещённых вершин
+    entry = {}
+    exit = {}
+    time = [0]
+    def dfs_visit(v):
+        visited.add(v)
+        # фиксируем время входа
+        time[0] += 1
+        entry[v] = time[0]
+        # обходим всех соседей
+        for neigh in graph[v]:
+            if neigh not in visited:
+                dfs_visit(neigh)
+        # фиксируем время выхода
+        time[0] += 1
+        exit[v] = time[0]
+    # запускаем DFS с каждой непосещённой вершины (граф может быть несвязным)
+    for vertex in graph:
+        if vertex not in visited:
+            dfs_visit(vertex)
+    return entry, exit
+# Пример графа
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D'],
+    'C': ['E'],
+    'D': [],
+    'E': []
+}
+# Запуск
+entry_time, exit_time = dfs(graph)
+
+print("Время входа:")
+for v in entry_time:
+    print(f"{v}: {entry_time[v]}")
+print("\nВремя выхода:")
+for v in exit_time:
+    print(f"{v}: {exit_time[v]}")
