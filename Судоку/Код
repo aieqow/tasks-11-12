@@ -1,0 +1,58 @@
+def solve_sudoku(board):
+    # Ищем первую пустую клетку (обозначенную 0)
+    empty = find_empty(board)
+    if not empty:
+        # Если пустых клеток нет — судоку решено
+        return True
+    row, col = empty
+    # Перебираем числа от 1 до 9 и пробуем вставить в текущую клетку
+    for num in range(1, 10):
+        if is_valid(board, num, row, col):
+            board[row][col] = num  # пробная вставка
+            # Если после вставки можно решить дальше — решение найдено
+            if solve_sudoku(board):
+                return True
+            # Иначе откатываем шаг (backtracking)
+            board[row][col] = 0
+    # Если ни одно число не подошло, возвращаем False
+    return False
+def is_valid(board, num, row, col):
+    # Проверяем строку
+    if num in board[row]:
+        return False
+    # Проверяем столбец
+    for r in range(9):
+        if board[r][col] == num:
+            return False
+    # Проверяем квадрат 3×3
+    start_row = (row // 3) * 3
+    start_col = (col // 3) * 3
+    for r in range(start_row, start_row + 3):
+        for c in range(start_col, start_col + 3):
+            if board[r][c] == num:
+                return False
+    return True
+def find_empty(board):
+    for row in range(9):
+        for col in range(9):
+            if board[row][col] == 0:
+                return (row, col)
+    return None
+# Пример решаемой судоку
+grid = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+]
+# Запуск алгоритма
+if solve_sudoku(grid):
+    for row in grid:
+        print(row)
+else:
+    print("Решения нет")
